@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фестивали</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/vendor/font-awesome/all.min.css">
+    <link rel="stylesheet" href="/static/vendor/inter/inter.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-video"></i>
+                    <span>Фестивали</span>
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <a href="#cameras" class="menu-item active" data-tab="cameras">
+                    <i class="fas fa-camera"></i>
+                    <span>Камеры</span>
+                </a>
+                <a href="#addresses" class="menu-item" data-tab="addresses">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Адреса</span>
+                </a>
+                <a href="#rooms" class="menu-item" data-tab="rooms">
+                    <i class="fas fa-door-open"></i>
+                    <span>Кабинеты</span>
+                </a>
+                <a href="#templates" class="menu-item" data-tab="templates">
+                    <i class="fas fa-clock"></i>
+                    <span>Расписание</span>
+                </a>
+                <a href="#bindings" class="menu-item" data-tab="bindings">
+                    <i class="fas fa-link"></i>
+                    <span>Привязки</span>
+                </a>
+                <a href="#recordings" class="menu-item" data-tab="recordings">
+                    <i class="fas fa-film"></i>
+                    <span>Записи</span>
+                </a>
+                <div style="flex:1"></div>
+                <a href="#profiles" class="menu-item" data-tab="profiles">
+                    <i class="fas fa-user-lock"></i>
+                    <span>Профили</span>
+                </a>
+            </div>
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <div class="status-dot online"></div>
+                    <span class="status-text">Система онлайн</span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="sidebar-overlay" onclick="window.toggleSidebar()"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="page-title" style="display:flex;align-items:center;gap:12px">
+                    <button class="sidebar-toggle" onclick="window.toggleSidebar()"><i class="fas fa-bars"></i></button>
+                    <div>
+                        <h1 id="page-title">Камеры</h1>
+                        <p class="subtitle">Управление RTSP-камерами</p>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-refresh" onclick="refreshCurrentTab()">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button class="btn btn-primary" id="add-btn" onclick="openModal()">
+                        <i class="fas fa-plus"></i>
+                        <span>Добавить</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-wrapper">
+                <div id="page-content"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Добавить</h2>
+                <button class="btn-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Отмена</button>
+                <button class="btn btn-primary" id="modal-save" onclick="saveModal()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Video Modal -->
+    <div class="modal-overlay" id="video-modal">
+        <div class="modal-content" style="max-width:900px">
+            <div class="modal-header">
+                <h2 id="video-modal-title">Запись</h2>
+                <button class="btn-close" onclick="window.closeVideoModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="padding:0">
+                <video id="video-player" controls style="width:100%;display:block;border-radius:0 0 var(--radius-lg) var(--radius-lg)"></video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Stream Modal -->
+    <div class="modal-overlay" id="live-modal">
+        <div class="modal-content" style="max-width:900px">
+            <div class="modal-header">
+                <h2 id="live-modal-title">Прямая трансляция</h2>
+                <button class="btn-close" onclick="window.closeLiveModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="padding:0">
+                <div class="live-player">
+                    <img id="live-modal-img" style="width:100%;height:100%;object-fit:cover" alt="Live stream">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal-content confirm-modal">
+            <div class="modal-header">
+                <h2>Подтвердите действие</h2>
+                <button class="btn-close" onclick="window.closeConfirmModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="confirm-body"></div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="confirm-btn" onclick="window.execConfirm()"><i class="fas fa-trash"></i> Удалить</button>
+                <button class="btn btn-secondary" onclick="window.closeConfirmModal()">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/static/js/app.js?v=15"></script>
+</body>
+</html>

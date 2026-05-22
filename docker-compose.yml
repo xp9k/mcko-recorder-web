@@ -1,0 +1,12 @@
+services:
+  app:
+    build: .
+    container_name: mcko-recorder
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:///./data/scheduler.db
+      - RECORDINGS_DIR=./data/recordings
+    restart: unless-stopped
